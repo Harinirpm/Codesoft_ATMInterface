@@ -1,0 +1,100 @@
+import java.util.Scanner;
+class Account {
+    private String accountNumber;
+    private String pin;
+    private double balance;
+    public Account(String accountNumber, String pin, double balance) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.balance = balance;
+}
+public String getAccountNumber() {
+return accountNumber;
+    }
+public String getPin() {
+return pin;
+    }
+public double getBalance() {
+return balance;
+    }
+ public void deposit(double amount) {
+ balance += amount;
+    }
+public boolean withdraw(double amount) {
+    if (amount > 0 && amount <= balance) {
+      balance -= amount;
+        return true;
+        } else {
+         return false;
+        }}}
+class ATM {
+    private Account account;
+    public ATM(Account account) {
+        this.account = account;
+    }
+public void displayMenu() {
+        System.out.println("\nATM Menu:");
+        System.out.println("1. Balance Inquiry");
+        System.out.println("2. Withdrawal");
+        System.out.println("3. Deposit");
+        System.out.println("4. Exit");
+    }
+public void executeTransaction(int choice) {
+        switch (choice) {
+    case 1:
+        System.out.println("Balance: $" + account.getBalance());
+        break;
+    case 2:
+         double withdrawAmount = promptForAmount("Enter withdrawal amount: $");
+         if (account.withdraw(withdrawAmount)) {
+         System.out.println("Withdrawal successful. Remaining balance: $" + account.getBalance());
+         } else {
+         System.out.println("Invalid amount or insufficient funds.");
+                }
+          break;
+    case 3:
+         double depositAmount = promptForAmount("Enter deposit amount: $");
+          account.deposit(depositAmount);
+          System.out.println("Deposit successful. New balance: $" + account.getBalance());
+          break;
+    case 4:
+          System.out.println("Thank you for using the ATM. Goodbye!");
+          System.exit(0);
+                break;
+    default:
+          System.out.println("Invalid choice. Please try again.");
+        }}
+private double promptForAmount(String message) {
+        Scanner scanner = new Scanner(System.in);
+        double amount = 0;
+        while (true) {
+            try {
+                System.out.print(message);
+                amount = Double.parseDouble(scanner.nextLine());
+                if (amount <= 0) {
+                    System.out.println("Invalid amount. Please enter a positive value.");
+                } else {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }return amount;
+    }}
+public class ATMInterface {
+    public static void main(String[] args) {
+   Account userAccount = new Account("123456789", "1234", 0.0);
+   ATM atm = new ATM(userAccount);
+   while (true) {
+   atm.displayMenu();
+   Scanner scanner = new Scanner(System.in);
+   System.out.print("Enter your choice: ");
+   int choice;
+   try {
+   choice = Integer.parseInt(scanner.nextLine());
+   } catch (NumberFormatException e) {
+   System.out.println("Invalid input. Please enter a number.");
+   continue;
+   }
+atm.executeTransaction(choice);
+        }}}
